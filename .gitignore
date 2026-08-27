@@ -1,0 +1,9 @@
+.venv/
+.env
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+data/raw/
+data/chunks.jsonl
+data/eval_set.jsonl
