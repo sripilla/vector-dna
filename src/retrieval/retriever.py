@@ -2,12 +2,12 @@ from src.embeddings import Embedder
 from src.vectordb.client import get_qdrant_client
 from src.vectordb.setup import COLLECTION_NAME
 
-
 class Retriever:
-    def __init__(self, top_k=5):
+    def __init__(self, top_k=5, score_threshold=0.5):
         self.embedder = Embedder()
         self.client = get_qdrant_client()
         self.top_k = top_k
+        self.score_threshold = score_threshold
 
     def search(self, query):
         # Convert the question into a vector
@@ -20,7 +20,7 @@ class Retriever:
             limit=self.top_k,
         ).points
 
-        # Return useful information from each result
+        # Return only sufficiently relevant results
         return [
             {
                 "score": result.score,
@@ -29,4 +29,5 @@ class Retriever:
                 "text": result.payload.get("text"),
             }
             for result in results
+            if result.score >= self.score_threshold
         ]
