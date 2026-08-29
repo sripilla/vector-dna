@@ -7,8 +7,6 @@ logging.basicConfig(
 )
 
 from fastapi import FastAPI, HTTPException
-
-from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from src.generation.generator import Generator
 
@@ -104,6 +102,8 @@ def ask_question(request: QuestionRequest):
     len(sources),
 )
     elapsed = time.perf_counter() - start_time
+
+    logger.info("Request completed in %.3f seconds", elapsed)
 
     return {
         "question": request.question,
