@@ -1,7 +1,18 @@
-from fastapi import FastAPI
+import logging
+import time
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+
+from fastapi import FastAPI, HTTPException
+
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from src.generation.generator import Generator
 
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="VectorDNA API",
@@ -67,7 +78,17 @@ def health_check():
     description="Retrieves relevant Python documentation and generates a grounded answer using the local language model.",
 )
 def ask_question(request: QuestionRequest):
-    result = generator.answer(request.question)
+    start_time = time.perf_counter()
+    logger.info("Received question: %s", request.question)
+
+    try:
+        result = generator.answer(request.question)
+    except Exception:
+        logger.exception("Failed to generate answer")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate an answer",
+        )
 
     sources = [
         {
@@ -77,6 +98,12 @@ def ask_question(request: QuestionRequest):
         }
         for item in result["results"]
     ]
+
+    logger.info(
+    "Generated answer with %d sources",
+    len(sources),
+)
+    elapsed = time.perf_counter() - start_time
 
     return {
         "question": request.question,
