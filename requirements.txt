@@ -2,3 +2,7 @@ qdrant-client
 python-dotenv
 pydantic
 pydantic-settings
+sentence-transformers
+ollama
+fastapi
+uvicorn
