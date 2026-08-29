@@ -11,7 +11,7 @@ class Generator:
     def __init__(self, top_k: int = 3):
         self.retriever = Retriever(top_k=top_k)
 
-    def answer(self, question: str) -> str:
+    def answer(self, question: str):
         # 1. Retrieve relevant documents
         results = self.retriever.search(question)
 
@@ -47,7 +47,11 @@ Answer:
             ],
         )
 
-        return response["message"]["content"]
+        # 5. Return both answer and retrieved sources
+        return {
+            "answer": response["message"]["content"],
+            "results": results,
+        }
 
 
 def main() -> None:
@@ -55,13 +59,24 @@ def main() -> None:
 
     question = "How does the asyncio event loop work?"
 
-    answer = generator.answer(question)
+    result = generator.answer(question)
 
     print("\nQuestion:")
     print(question)
 
     print("\nAnswer:")
-    print(answer)
+    print(result["answer"])
+
+    print("\nSources:")
+
+    for item in result["results"]:
+        print(
+            item["source"],
+            "|",
+            item["section"],
+            "|",
+            item["score"],
+        )
 
 
 if __name__ == "__main__":
