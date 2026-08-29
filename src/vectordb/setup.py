@@ -1,7 +1,7 @@
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
-from src.config import settings
+from src.config.settings import settings
 
 
 COLLECTION_NAME = "python_docs"

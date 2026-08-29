@@ -1,12 +1,11 @@
 from sentence_transformers import SentenceTransformer
 
-
-MODEL_NAME = "all-MiniLM-L6-v2"
+from src.config.settings import settings
 
 
 class Embedder:
     def __init__(self):
-        self.model = SentenceTransformer(MODEL_NAME)
+        self.model = SentenceTransformer(settings.embedding_model)
 
     def encode(self, texts: list[str]) -> list[list[float]]:
         vectors = self.model.encode(

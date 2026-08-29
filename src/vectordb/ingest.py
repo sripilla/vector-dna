@@ -1,7 +1,7 @@
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct
 
-from src.config import settings
+from src.config.settings import settings
 from src.corpus.build import build_corpus
 from src.embeddings import Embedder
 from src.vectordb.setup import COLLECTION_NAME

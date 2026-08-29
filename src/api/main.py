@@ -9,6 +9,7 @@ logging.basicConfig(
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from src.generation.generator import Generator
+from src.config.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-generator = Generator(top_k=3)
+generator = Generator(top_k=settings.top_k)
 
 
 class QuestionRequest(BaseModel):
